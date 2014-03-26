@@ -41,7 +41,8 @@ public class MastersBean implements Serializable {
      * Creates a new instance of MastersBean
      */
     public MastersBean() {
-
+        System.err.println("Location :" + MastersBean.class
+                .getProtectionDomain().getCodeSource().getLocation().getFile());
         connect();
 
     }
@@ -83,14 +84,16 @@ public class MastersBean implements Serializable {
         try {
             PrintWriter out;
             out = new PrintWriter(new BufferedWriter(new FileWriter(
-                    "C:\\Users\\Dell\\Documents\\NetBeansProjects\\dynamictTable\\web\\resources\\masters.xhtml", false)));
+                    "/Web Pages/resources/masters.xhtml", false)));
             out.println("<?xml version='1.0' encoding='UTF-8' ?>\r\n"
                     + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\r\n"
                     + "<html xmlns=\"http://www.w3.org/1999/xhtml\"\r\n"
                     + "      xmlns:f=\"http://xmlns.jcp.org/jsf/core\">\r\n<!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!DO NOT MODIFY!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->");
+            int i = 1;
             for (Master master : mastersList) {
                 out.println("<f:selectItem itemLabel=\"" + master.getNomMaster()
-                        + "\" itemValue=\"" + master.getNomMaster() + "\"/>");
+                        + "\" itemValue=\"" + i + "\"/>");
+                i++;
             }
             out.println("</html>");
             out.close();
