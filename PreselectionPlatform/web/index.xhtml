@@ -1,0 +1,70 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+        <h:form id="form">  
+
+            <p:growl id="messages" showDetail="true"/>  
+
+            <p:contextMenu for="cars" widgetVar="cMenu">     
+                <p:menuitem value="Edit Cell" icon="ui-icon-search" onclick="PF('carsTable').showCellEditor();
+                        return false;"/>    
+                <p:menuitem value="Hide Menu" icon="ui-icon-close" onclick="PF('cMenu').hide()"/>    
+            </p:contextMenu>   
+
+            <p:dataTable id="cars" var="car" value="#{tableBean.carsSmall}" editable="true" editMode="cell" widgetVar="carsTable">  
+
+                <f:facet name="header">  
+                    Cursus 
+                </f:facet>  
+
+<!--                <p:ajax event="cellEdit" listener="#{tableBean.onCellEdit}" update=":form:messages" />  -->
+
+                <p:column headerText="Model" style="width:25%">  
+                    <p:cellEditor>  
+                        <f:facet name="output"><h:outputText value="#{car.model}" /></f:facet>  
+                        <f:facet name="input"><p:inputText id="modelInput" value="#{car.model}" style="width:96%"/></f:facet>  
+                    </p:cellEditor>  
+                </p:column>  
+
+                <p:column headerText="Year" style="width:25%">  
+                    <p:cellEditor>  
+                        <f:facet name="output"><h:outputText value="#{car.year}" /></f:facet>  
+                        <f:facet name="input"><p:inputText value="#{car.year}" style="width:96%" label="Year"/></f:facet>  
+                    </p:cellEditor>  
+                </p:column>  
+
+                <p:column headerText="Manufacturer" style="width:25%">  
+                    <p:cellEditor>  
+                        <f:facet name="output"><h:outputText value="#{car.manufacturer}" /></f:facet>  
+                        <f:facet name="input">  
+                            <h:selectOneMenu value="#{car.manufacturer}" style="width:100%">  
+                                <f:selectItems value="#{tableBean.manufacturers}" var="man" itemLabel="#{man}" itemValue="#{man}" />  
+                            </h:selectOneMenu>  
+                        </f:facet>  
+                    </p:cellEditor>  
+                </p:column>  
+
+                <p:column headerText="Color" style="width:25%">  
+                    <p:cellEditor>  
+                        <f:facet name="output"><h:outputText value="#{car.color}" /></f:facet>  
+                        <f:facet name="input">  
+                            <h:selectOneMenu value="#{car.color}" style="width:100%">  
+                                <f:selectItems value="#{tableBean.colors}" var="color" itemLabel="#{color}" itemValue="#{color}" />  
+                            </h:selectOneMenu>  
+                        </f:facet>  
+                    </p:cellEditor>  
+                </p:column>  
+                
+            </p:dataTable>  
+            <p:commandButton value="+" actionListener="#{tableBean.addRecord()}" update="cars"/>
+        </h:form>
+    </h:body>
+</html>
+

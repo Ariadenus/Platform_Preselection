@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Facelet Title</title>
+    </h:head>
+    <h:body>
+       <h:form id="form">  
+        <p:dataTable id="exigences" var="exigence" value="#{exigencesBean.getListExigences()}" editable="true" editMode="cell" >  
+
+                <f:facet name="header">  
+                    Exigences
+                </f:facet>  
+            
+            <p:column headerText="Nom de la matière" style="width:25%">  
+                    <p:cellEditor>  
+                        <f:facet name="output"><h:outputText value="#{exigence.nomMatiere}" /></f:facet>  
+                        <f:facet name="input"><p:inputText id="nomInput" value="#{exigence.nomMatiere}" style="width:96%"/></f:facet>  
+                    </p:cellEditor>  
+                </p:column>
+            
+            <p:column headerText="Coefficient" style="width:25%">  
+                    <p:cellEditor>  
+                        <f:facet name="output"><h:outputText value="#{exigence.coefficient}" /></f:facet>  
+                        <f:facet name="input"><p:inputText id="coefficientInput" value="#{exigence.coefficient}" style="width:96%"/></f:facet>  
+                    </p:cellEditor>  
+                </p:column>
+            <p:column style="width:6%">  
+                <p:commandButton value="-"  actionListener="#{exigencesBean.deleteRecord(exigence)}" update="exigences" />
+        </p:column>
+        </p:dataTable>
+           <p:commandButton value="+" actionListener="#{exigencesBean.addRecord()}" update="exigences"/>
+            </h:form>
+    </h:body>
+</html>

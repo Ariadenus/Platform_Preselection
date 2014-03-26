@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <h:outputStylesheet name="./css/default.css"/>
+        <h:outputStylesheet name="./css/cssLayout.css"/>
+        <title>Facelets Template</title>
+    </h:head>
+
+    <h:body>
+
+        <p:tabView id="tabView">  
+
+
+
+            <p:tab id="tab1" title="Gérer les exigences de Master">  
+                <h:panelGrid columns="1" cellpadding="00">  
+                    <h:form id="form" >  
+
+                        <h:outputText value="Nom du Master " />
+                        <p:selectOneMenu value="#{exigencesBean.currentMaster}">
+                            <p:ajax event="change" update="exigences"/>
+                            <f:selectItem itemLabel="" itemValue="" />
+                            <ui:include src="/resources/masters.xhtml" />
+                        </p:selectOneMenu>
+
+                        <p:dataTable id="exigences" var="exigence" value="#{exigencesBean.currentMasterObject.listExigences}"  editable="true" editMode="cell" >  
+
+                            <f:facet name="header">  
+                                Exigences
+                            </f:facet>  
+
+                            <p:column headerText="Nom de la matière" style="width:50%">  
+                                <p:cellEditor>  
+                                    <f:facet name="output"><h:outputText value="#{exigence.nomMatiere}" /></f:facet>  
+                                    <f:facet name="input"><p:inputText id="nomInput" value="#{exigence.nomMatiere}" style="width:96%"/></f:facet>  
+                                </p:cellEditor>  
+                            </p:column>
+
+                            <p:column headerText="Coefficient" style="width:25%">  
+                                <p:cellEditor>  
+                                    <f:facet name="output"><h:outputText value="#{exigence.coefficient}" /></f:facet>  
+                                    <f:facet name="input"><p:inputText id="coefficientInput" value="#{exigence.coefficient}" style="width:96%"/></f:facet>  
+                                </p:cellEditor>  
+                            </p:column>
+                            <p:column style="width:6%">  
+                                <p:commandButton value="-"  actionListener="#{exigencesBean.deleteRecord(exigence)}" update="exigences" />
+                            </p:column>
+                        </p:dataTable>
+                        <p:commandButton value="+" actionListener="#{exigencesBean.addRecord()}" update="exigences"/>
+                        <h:commandLink value="Enregistrer" action="#{exigencesBean.save()}" /> 
+
+
+                    </h:form>
+                </h:panelGrid>  
+            </p:tab>  
+
+            <p:tab id="tab2" title="Géstion des masters">  
+                <h:panelGrid columns="2" cellpadding="10">  
+                    <h:form>
+
+                        <p:dataTable id="masters" var="master" value="#{mastersBean.mastersList}" editable="true" editMode="cell" >
+
+                            <p:column headerText="Nom du master" style="width:25%">  
+                                <p:cellEditor>  
+                                    <f:facet name="output"><h:outputText value="#{master.nomMaster}" /></f:facet>  
+                                    <f:facet name="input"><p:inputText id="coefficientInput" value="#{master.nomMaster}" style="width:96%"/></f:facet>  
+                                </p:cellEditor>  
+                            </p:column>
+
+                            <p:column style="width:6%">  
+                                <p:commandButton value="-"  actionListener="#{mastersBean.deleteRecord(master)}" update="masters" />
+                            </p:column>
+                        </p:dataTable>
+                        <p:commandButton value="+"  actionListener="#{mastersBean.addRecord()}" update="masters" />
+                        <p:commandButton value="Enregistrer"  actionListener="#{mastersBean.save()}" update="masters" />
+                    </h:form>
+                </h:panelGrid>  
+            </p:tab>  
+
+            <p:tab id="tab3" title="Godfather Part III">  
+                <h:panelGrid columns="2" cellpadding="10">  
+                    <p:graphicImage id="tab3Img" value="/images/godfather/godfather3.jpg" />  
+                    <h:outputText id="tab3Text" value="After a break of more than 15 years, director Francis Ford Coppola and writer Mario Puzo returned to the well for this third and final story of the fictional Corleone crime family.  
+                                  Two decades have passed, and crime kingpin Michael Corleone, now divorced from his wife Kay has nearly succeeded in keeping his promise that his family would one day be completely legitimate."/>  
+                </h:panelGrid>  
+            </p:tab>  
+
+        </p:tabView>  
+
+
+
+    </h:body>
+
+</html>
