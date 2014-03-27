@@ -16,14 +16,14 @@
     <h:body>
 
         <p:tabView id="tabView">  
-            <p:tab id="hihihih" title="Gérer les exigences de Master">  
-                <h:panelGrid id="grid" columns="1" cellpadding="00">  
+            <p:tab id="tab1" title="Gérer les exigences de Master">  
+               
                     <h:form id="form" >  
                         <h:outputText  value="Nom du Master " />
                         <p:selectOneMenu id="mastersList" value="#{exigencesBean.currentMaster}">
                             <p:ajax event="change" update="exigences"/>
                             <f:selectItem itemLabel="" itemValue="" />
-                            <ui:include src="/resources/masters.xhtml" />
+                            <ui:include src="/WEB-INF/masters.xhtml" />
                         </p:selectOneMenu>
 
                         <p:dataTable id="exigences" var="exigence" value="#{exigencesBean.currentMasterObject.listExigences}"  editable="true" editMode="cell" >  
@@ -49,14 +49,14 @@
                                 <p:commandButton value="-"  actionListener="#{exigencesBean.deleteRecord(exigence)}" update="exigences" />
                             </p:column>
                         </p:dataTable>
+                        
                         <p:commandButton value="+" actionListener="#{exigencesBean.addRecord()}" update="exigences"/>
                         <h:commandLink value="Enregistrer" action="#{exigencesBean.save()}" /> 
                     </h:form>
-                </h:panelGrid>  
+                
             </p:tab>  
 
             <p:tab id="tab2" title="Géstion des masters">  
-                <h:panelGrid columns="2" cellpadding="10">  
                     <h:form>
                         <p:dataTable id="masters" var="master" value="#{mastersBean.mastersList}" editable="true" editMode="cell" >
 
@@ -72,10 +72,10 @@
                             </p:column>
                         </p:dataTable>
                         <p:commandButton value="+"  actionListener="#{mastersBean.addRecord()}" update="masters" />
-                        <p:commandButton value="Enregistrer"  actionListener="#{mastersBean.save()}" update="masters , :tabView"  >
+                        
+                        <p:commandButton value="Enregistrer"  actionListener="#{mastersBean.save()}" update="masters"  >
                         </p:commandButton>
                     </h:form>
-                </h:panelGrid>  
             </p:tab>  
 
             <p:tab id="tab3" title="Godfather Part III">  
