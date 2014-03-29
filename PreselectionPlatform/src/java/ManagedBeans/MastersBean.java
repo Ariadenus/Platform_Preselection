@@ -11,30 +11,33 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
+import services.DBConnection;
 
 /**
  *
  * @author Dell
  */
-@ManagedBean(name = "mastersBean")
-@SessionScoped
+@ManagedBean(name = "mastersBean", eager = true)
+@ApplicationScoped
 public class MastersBean implements Serializable {
 
     private final ArrayList<Master> mastersList = new ArrayList<>();
-    private Connection connection;
+    private final Connection connection = DBConnection.getConnection();
 
-    public static String driver = "com.mysql.jdbc.Driver";
-    public static String user = "root";
-    public static String password = "";
-    String url = "jdbc:mysql://localhost:3306/master";
+    public Connection getConnection() {
+        return connection;
+    }
+
     String Query = "select NOM_MASTER from master";
 
     /**
@@ -44,6 +47,7 @@ public class MastersBean implements Serializable {
         System.err.println("Location :" + MastersBean.class
                 .getProtectionDomain().getCodeSource().getLocation().getFile());
         connect();
+        System.out.println("Masters Bean loading complete");
 
     }
 
@@ -71,8 +75,9 @@ public class MastersBean implements Serializable {
             java.sql.Statement statement = connection.createStatement();
             statement.executeUpdate("DELETE FROM  master;");
 
+            int i = 1;
             for (Master master : mastersList) {
-                statement.executeUpdate("insert into master (NOM_MASTER) values ('" + master.getNomMaster() + "');");
+                statement.executeUpdate("insert into master (code_master , NOM_MASTER) values ('" + i + "' , '" + master.getNomMaster() + "');");
             }
         } catch (SQLException ex) {
             Logger.getLogger(MastersBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -82,9 +87,13 @@ public class MastersBean implements Serializable {
     public void writeInXHTML() {
 
         try {
+
+            ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+            ServletContext servletContext = (ServletContext) externalContext.getContext();
+            String absoluteDiskPath = servletContext.getRealPath("/WEB-INF/masters.xhtml");
             PrintWriter out;
             out = new PrintWriter(new BufferedWriter(new FileWriter(
-                    "C:\\Users\\Dell\\Documents\\GitHub\\Platform_Preselection\\PreselectionPlatform\\build\\web\\WEB-INF\\masters.xhtml", false)));
+                    absoluteDiskPath, false)));
             out.println("<?xml version='1.0' encoding='UTF-8' ?>\r\n"
                     + "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\r\n"
                     + "<html xmlns=\"http://www.w3.org/1999/xhtml\"\r\n"
@@ -103,16 +112,14 @@ public class MastersBean implements Serializable {
     }
 
     private void connect() {
+        java.sql.Statement statement;
         try {
-            Class.forName(driver);
-            connection = DriverManager.getConnection(url, user,
-                    password);
-            java.sql.Statement statement = connection.createStatement();
+            statement = connection.createStatement();
             ResultSet result = statement.executeQuery(Query);
             while (result.next()) {
                 mastersList.add(new Master(result.getString("NOM_MASTER")));
             }
-        } catch (ClassNotFoundException | SQLException ex) {
+        } catch (SQLException ex) {
             Logger.getLogger(MastersBean.class.getName()).log(Level.SEVERE, null, ex);
         }
 

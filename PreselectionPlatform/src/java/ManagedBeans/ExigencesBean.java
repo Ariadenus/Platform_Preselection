@@ -6,6 +6,7 @@
 package ManagedBeans;
 
 import java.io.Serializable;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,8 @@ import services.DBConnection;
 @ManagedBean(name = "exigencesBean")
 @SessionScoped
 public class ExigencesBean implements Serializable {
+
+    private final Connection connection = DBConnection.getConnection();
 
     private static final List<Moyennes> listExigences = new ArrayList<>();
     private static final List<Master> listMasters = new ArrayList<>();
@@ -96,13 +99,13 @@ public class ExigencesBean implements Serializable {
     public void save() {
 
         try {
-            java.sql.Statement statement = DBConnection.getInstance().openConnection().createStatement();
-            for (int i = 0; i < listExigences.size(); i++) {
-                statement.executeUpdate("insert into exigences(NOM_MATIERE,COEFFICIENT) values('" + currentMasterObject.listExigences.get(i).getNomMatiere() + "'," + currentMasterObject.listExigences.get(i).getCoefficient());
+            java.sql.Statement statement = connection.createStatement();
+            //statement.executeUpdate("DELETE FROM  exigences WHERE code_master = " + currentMasterObject.getNomMaster() + " ;");
+            for (int i = 0; i < currentMasterObject.listExigences.size(); i++) {
+                statement.executeUpdate("insert into exigences (NOM_MATIERE , COEFFICIENT , code_master ) values ('" + currentMasterObject.listExigences.get(i).getNomMatiere() + "' , '" + currentMasterObject.listExigences.get(i).coefficient + "' , '" + currentMasterObject.nomMaster + "');");
             }
-
         } catch (SQLException ex) {
-            Logger.getLogger(ExigencesBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ExigencesBean.class.getName()).log(Level.SEVERE, "Exception during persistance of exigences", ex);
         }
 
     }
