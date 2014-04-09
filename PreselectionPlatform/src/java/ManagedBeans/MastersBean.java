@@ -5,6 +5,7 @@
  */
 package ManagedBeans;
 
+import com.master.control.Controller;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -71,17 +72,20 @@ public class MastersBean implements Serializable {
     }
 
     public void writeToDB() {
-        try {
-            java.sql.Statement statement = connection.createStatement();
-            statement.executeUpdate("DELETE FROM  master;");
+//        try {
+//            java.sql.Statement statement = connection.createStatement();
+//            statement.executeUpdate("DELETE FROM  master;");
+//
+//            int i = 1;
+//            for (Master master : mastersList) {
+//                statement.executeUpdate("insert into master (code_master , NOM_MASTER) values ('" + i + "' , '" + master.getNomMaster() + "');");
+//            }
+//        } catch (SQLException ex) {
+//            Logger.getLogger(MastersBean.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        Controller controller = new Controller();
+        controller.addMasters(mastersList);
 
-            int i = 1;
-            for (Master master : mastersList) {
-                statement.executeUpdate("insert into master (code_master , NOM_MASTER) values ('" + i + "' , '" + master.getNomMaster() + "');");
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(MastersBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     public void writeInXHTML() {
@@ -118,9 +122,11 @@ public class MastersBean implements Serializable {
             ResultSet result = statement.executeQuery(Query);
             while (result.next()) {
                 mastersList.add(new Master(result.getString("NOM_MASTER")));
+
             }
         } catch (SQLException ex) {
-            Logger.getLogger(MastersBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MastersBean.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
 
     }
